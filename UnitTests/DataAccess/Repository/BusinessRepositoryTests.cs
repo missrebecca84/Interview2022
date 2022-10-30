@@ -1,12 +1,11 @@
 ﻿using Core.DataAccess.Entities;
 using Infrastructure.DataAccess.Data;
-using Infrastructure.DataAccess.Repositories;
 using Infrastructure.DataAccess.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
 
-namespace UnitTests.Repository;
+namespace UnitTests.DataAccess.Repository;
 
 /// <summary>
 /// Test Class for testing the Async Repository Class
@@ -14,17 +13,17 @@ namespace UnitTests.Repository;
 /// Typically, I would mock all of these classes. I just wanted to show both techniques
 /// </summary>
 [TestFixture]
-public class MicrogrooveRepositoryTests
+public class BusinessRepositoryTests
 {
-    private DbContextOptions<MicrogrooveContext> _contextOptions;
-      
+    private DbContextOptions<BusinessContext> _contextOptions;
+
     [SetUp]
     public void Setup()
     {
         var dbName = $"Customers_{DateTime.Now.ToFileTimeUtc()}";
-        _contextOptions = new DbContextOptionsBuilder<MicrogrooveContext>()
+        _contextOptions = new DbContextOptionsBuilder<BusinessContext>()
             .UseInMemoryDatabase(dbName)
-            .Options;       
+            .Options;
     }
 
     [Test]
@@ -33,10 +32,10 @@ public class MicrogrooveRepositoryTests
 
         var dbSetMock = new Mock<DbSet<Customer>>();
         dbSetMock.Setup(s => s.FindAsync(It.IsAny<Guid>())).Returns(() => ValueTask.FromResult(new Customer()));
-        var mockContext = new Mock<MicrogrooveContext>(_contextOptions);
+        var mockContext = new Mock<BusinessContext>(_contextOptions);
         mockContext.Setup(s => s.Set<Customer>()).Returns(dbSetMock.Object);
 
-        var customerRepository = new MicrogrooveRepository<Customer>(mockContext.Object);
+        var customerRepository = new BusinessRepository<Customer>(mockContext.Object);
         var customer = customerRepository.GetById(Guid.NewGuid()).Result;
 
         //Assert  
@@ -54,15 +53,15 @@ public class MicrogrooveRepositoryTests
             FullName = "Test Customer",
             DateOfBirth = DateTime.Now.Date
         };
-        var context = new MicrogrooveContext(_contextOptions);
-        var customerRepository = new MicrogrooveRepository<Customer>(context);
+        var context = new BusinessContext(_contextOptions);
+        var customerRepository = new BusinessRepository<Customer>(context);
 
         //Act
         try
         {
             await customerRepository.Add(customer);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             exception = ex;
         }
@@ -79,16 +78,16 @@ public class MicrogrooveRepositoryTests
             FullName = "Test Customer",
             DateOfBirth = DateTime.Now.Date
         };
-        var context = new MicrogrooveContext(_contextOptions);
-        var customerRepository = new MicrogrooveRepository<Customer>(context);
-        
+        var context = new BusinessContext(_contextOptions);
+        var customerRepository = new BusinessRepository<Customer>(context);
+
         //Act
         await customerRepository.Add(customer);
         var retrievedCustomer = (await customerRepository.GetWhere(a => a.FullName == customer.FullName).ConfigureAwait(false)).FirstOrDefault();
-        
+
         //Assert  
-        Assert.NotNull(retrievedCustomer);        
+        Assert.NotNull(retrievedCustomer);
         Assert.IsAssignableFrom<Customer>(retrievedCustomer);
-        Assert.IsNotNull(retrievedCustomer?.CustomerId);
+        Assert.IsNotNull(retrievedCustomer?.Id);
     }
 }

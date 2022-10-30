@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using Core.DataAccess.Repositories;
 using Core.Domain.Exceptions;
-using Core.Domain.Models;
 using Core.Domain.Services;
 using Microsoft.Extensions.Logging;
+using DomainModels = Core.Domain.Models;
+using Entities = Core.DataAccess.Entities;
 
 namespace Infrastructure.Domain.Services;
 
@@ -25,10 +26,10 @@ public class CustomerService : ICustomerService
     }
 
     /// <inheritdoc/>
-    public async Task<Customer> GetCustomerByIdAsync(Guid id)
+    public async Task<DomainModels.Customer> GetCustomerByIdAsync(Guid id)
     {
         _logger.LogInformation("Entering CustomerService {Method}", nameof(GetCustomerByIdAsync));
-        var returnValue = new Customer();
+        var returnValue = new DomainModels.Customer();
         try
         {
             var entityFound = await _customerRepository.GetById(id).ConfigureAwait(false);
@@ -46,13 +47,16 @@ public class CustomerService : ICustomerService
     }
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<Customer>> GetCustomersByAgeAsync(int age)
+    public async Task<IEnumerable<DomainModels.Customer>> GetCustomersByAgeAsync(int age)
     {
         _logger.LogInformation("Entering CustomerService {Method}", nameof(GetCustomersByAgeAsync));
-        var returnValue = new List<Customer>();
+        var returnValue = new List<DomainModels.Customer>();
         try
         {
-
+            if(age == 0)
+                throw new InvalidAgeException();
+            var entitiesFound = await _customerRepository.GetCustomersByAgeAsync(age).ConfigureAwait(false);
+            _mapper.Map(entitiesFound, returnValue);
         }
         catch (Exception ex)
         {
@@ -64,13 +68,16 @@ public class CustomerService : ICustomerService
     }
 
     /// <inheritdoc/>
-    public async Task<Guid> SaveCustomerAsync(Customer customer)
+    public async Task<Guid> SaveCustomerAsync(DomainModels.Customer customer)
     {
         _logger.LogInformation("Entering CustomerService {Method}", nameof(SaveCustomerAsync));
         Guid returnValue = Guid.Empty;
         try
         {
-
+            if(customer == null)
+                throw new ArgumentNullException(nameof(customer));
+            var entityCustomer = _mapper.Map<Entities.Customer>(customer);
+            returnValue = await _customerRepository.SaveCustomer(entityCustomer).ConfigureAwait(false);
         }
         catch (Exception ex)
         {

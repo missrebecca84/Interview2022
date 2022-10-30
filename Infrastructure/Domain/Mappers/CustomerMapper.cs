@@ -10,8 +10,9 @@ public class CustomerMapper : Profile
 
     {
         CreateMap<DomainModels.Customer, Entities.Customer>()
-            .ForMember(dest => dest.CustomerId, a => a.AllowNull());
+            .ForMember(dest => dest.Id, a => a.MapFrom(src => src.CustomerId))
+            .ForMember(dest => dest.Id, a => a.AllowNull());
         CreateMap<Entities.Customer, DomainModels.Customer>()
-            .ForMember(dest => dest.Id, a => a.MapFrom(src => src.CustomerId));
+            .ForMember(dest => dest.CustomerId, a => a.MapFrom(src => src.Id));
     }
 }

@@ -1,19 +1,26 @@
 ﻿using Core.DataAccess.Entities;
 using Core.DataAccess.Repositories;
+using Core.Domain.Exceptions;
 using Infrastructure.DataAccess.Data;
 using Infrastructure.DataAccess.Repositories.Base;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.DataAccess.Repositories;
 
-public class CustomerRepository : MicrogrooveRepository<Customer>, ICustomerRepository
+public class CustomerRepository : BusinessRepository<Customer>, ICustomerRepository
 {
     ILogger _logger;
-    public CustomerRepository(MicrogrooveContext dataContext, ILogger logger) : base(dataContext)
+    public CustomerRepository(BusinessContext dataContext, ILogger logger) : base(dataContext)
     {
         _logger = logger;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="customer"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"></exception>
     public async Task<Guid> SaveCustomer(Customer customer)
     {
         Guid id;
@@ -24,7 +31,7 @@ public class CustomerRepository : MicrogrooveRepository<Customer>, ICustomerRepo
                 throw new ArgumentNullException();
 
             await Add(customer);
-            id = customer.CustomerId.GetValueOrDefault();
+            id = customer.Id.GetValueOrDefault();
         }
         catch (Exception ex)
         {
@@ -36,15 +43,21 @@ public class CustomerRepository : MicrogrooveRepository<Customer>, ICustomerRepo
         return id;
     }
 
-    public async Task<IEnumerable<Customer>> GetCustomerByAgeAsync(int age)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="age"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidAgeException"></exception>
+    public async Task<IEnumerable<Customer>> GetCustomersByAgeAsync(int age)
     {
-        IEnumerable<Customer> returnList;
-        _logger.LogInformation("Entering CustomerRepository {Method}", nameof(GetCustomerByAgeAsync));
+        IEnumerable<Customer> returnList = new List<Customer>();
+        _logger.LogInformation("Entering CustomerRepository {Method}", nameof(GetCustomersByAgeAsync));
 
         try
         {
             if (age == 0)
-                throw new ArgumentException();
+                throw new InvalidAgeException();
 
             var ageInDaysStart = age * 365;
             var ageInDaysEnd = (age + 1) * 365;
@@ -53,10 +66,10 @@ public class CustomerRepository : MicrogrooveRepository<Customer>, ICustomerRepo
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error during CustomerRepository {Method}", nameof(GetCustomerByAgeAsync));
+            _logger.LogError(ex, "Error during CustomerRepository {Method}", nameof(GetCustomersByAgeAsync));
             throw;
         }
-        _logger.LogInformation("Exiting CustomerRepository {Method}", nameof(GetCustomerByAgeAsync));
+        _logger.LogInformation("Exiting CustomerRepository {Method}", nameof(GetCustomersByAgeAsync));
         return returnList;
     }
 }

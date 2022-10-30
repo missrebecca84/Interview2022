@@ -1,10 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.Domain.Validation;
 
@@ -18,7 +13,7 @@ public class ValidationWrapper<T>
     public T Value { get; set; }
     public IEnumerable<ValidationResult> ValidationResults { get; set; }
 
-    public static ValidationWrapper<T> BuildValidationWrapper<T>(string bodyString)
+    public static ValidationWrapper<T> BuildValidationWrapper(string bodyString)
     {
         ValidationWrapper<T> body = new ValidationWrapper<T>();
 

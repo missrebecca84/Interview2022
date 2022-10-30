@@ -10,7 +10,7 @@ namespace Core.DataAccess.Entities
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid? CustomerId { get; set; }
+        public Guid? Id { get; set; }
 
         /// <summary>
         /// Full name of the Customer

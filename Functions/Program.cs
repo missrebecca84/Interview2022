@@ -31,10 +31,10 @@ public class Program
             {
                 var cnn = new SqliteConnection("Filename=:memory:");
                 cnn.Open();
-                a.AddDbContext<MicrogrooveContext>(o => o.UseSqlite(cnn));
-                a.AddSingleton(new LoggerFactory().CreateLogger("Microgroove"));
+                a.AddDbContext<BusinessContext>(o => o.UseSqlite(cnn));
+                a.AddSingleton(new LoggerFactory().CreateLogger("Business"));
                 a.AddAutoMapper(typeof(CustomerMapper));
-                a.AddScoped(typeof(CustomerRepository), typeof(MicrogrooveRepository<Customer>));
+                a.AddScoped(typeof(CustomerRepository), typeof(BusinessRepository<Customer>));
                 a.AddScoped(typeof(ICustomerService), typeof(CustomerService));
             })
             .Build();

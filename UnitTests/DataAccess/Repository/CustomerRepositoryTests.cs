@@ -1,4 +1,5 @@
 ﻿using Core.DataAccess.Entities;
+using Core.Domain.Exceptions;
 using Infrastructure.DataAccess.Data;
 using Infrastructure.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +8,7 @@ using Moq;
 using NUnit.Framework;
 using UnitTests.Helpers;
 
-namespace UnitTests.Repository;
+namespace UnitTests.DataAccess.Repository;
 
 /// <summary>
 /// Unit Tests related to Customer specific repository logic
@@ -21,13 +22,12 @@ public class CustomerRepositoryTests
     public void Setup()
     {
         _logger = new ListLogger();
-        var mockLoggerFactory = new Mock<LoggerFactory>();
         var dbName = $"Customers_{DateTime.Now.ToFileTimeUtc()}";
-        var contextOptions = new DbContextOptionsBuilder<MicrogrooveContext>()
+        var contextOptions = new DbContextOptionsBuilder<BusinessContext>()
                 .UseInMemoryDatabase(dbName)
                 .Options;
-        var context = new MicrogrooveContext(contextOptions);
-        
+        var context = new BusinessContext(contextOptions);
+
         _customerRepository = new CustomerRepository(context, _logger);
     }
 
@@ -63,7 +63,7 @@ public class CustomerRepositoryTests
         //Act
         try
         {
-           await _customerRepository.SaveCustomer(null);
+            await _customerRepository.SaveCustomer(null);
         }
         catch (Exception ex)
         {
@@ -88,7 +88,7 @@ public class CustomerRepositoryTests
             FullName = "Test Person2",
             DateOfBirth = DateTime.Now.AddYears(-39).AddMonths(7) //age 38
         };
-         var customer3 = new Customer()
+        var customer3 = new Customer()
         {
             FullName = "Test Person3",
             DateOfBirth = DateTime.Now.AddYears(-39).AddMonths(-6) //age 39.5
@@ -99,7 +99,7 @@ public class CustomerRepositoryTests
             _customerRepository.Add(customer2),
             _customerRepository.Add(customer3)
         });
-        var customersAged38 = await _customerRepository.GetCustomerByAgeAsync(38).ConfigureAwait(false);
+        var customersAged38 = await _customerRepository.GetCustomersByAgeAsync(38).ConfigureAwait(false);
         Assert.IsNotNull(customersAged38);
         Assert.AreEqual(2, customersAged38.Count());
         Assert.IsFalse(customersAged38.Any(a => a.FullName == "Test Person3"));
@@ -132,9 +132,59 @@ public class CustomerRepositoryTests
         });
 
         //act
-        await _customerRepository.GetCustomerByAgeAsync(38).ConfigureAwait(false);
+        await _customerRepository.GetCustomersByAgeAsync(38).ConfigureAwait(false);
 
         //Assert
         Assert.AreEqual(2, _logger.Logs.Count);
+    }
+
+    [Test]
+    public async Task GetCustomerByAgeAsync_Returns_NoResults_AsExpected()
+    {
+        //arrange
+        var customer1 = new Customer()
+        {
+            FullName = "Test Person1",
+            DateOfBirth = DateTime.Now.AddYears(-39).AddMonths(6) //age 38
+        };
+        var customer2 = new Customer()
+        {
+            FullName = "Test Person2",
+            DateOfBirth = DateTime.Now.AddYears(-39).AddMonths(7) //age 38
+        };
+        var customer3 = new Customer()
+        {
+            FullName = "Test Person3",
+            DateOfBirth = DateTime.Now.AddYears(-39).AddMonths(-6) //age 39.5
+        };
+        Task.WaitAll(new Task[]
+        {
+            _customerRepository.Add(customer1),
+            _customerRepository.Add(customer2),
+            _customerRepository.Add(customer3)
+        });
+        var customersAged10 = await _customerRepository.GetCustomersByAgeAsync(10).ConfigureAwait(false);
+        Assert.IsNotNull(customersAged10);
+        Assert.AreEqual(0, customersAged10.Count());
+        Assert.IsFalse(customersAged10.Any(a => a.FullName == "Test Person3"));
+    }
+
+    [Test]
+    public async Task GetCustomersByAgeAsync_NullValues_ThrowsException_Logs_AsExpected()
+    {
+        Exception exception = null;
+        //Act
+        try
+        {
+            await _customerRepository.GetCustomersByAgeAsync(0);
+        }
+        catch (Exception ex)
+        {
+            exception = ex;
+        }
+        Assert.IsNotNull(exception);
+        Assert.IsAssignableFrom<InvalidAgeException>(exception);
+        Assert.AreEqual(2, _logger.Logs.Count);
+        Assert.IsTrue(_logger.Logs.Any(a => a.ToLower().Contains("error")));
     }
 }
