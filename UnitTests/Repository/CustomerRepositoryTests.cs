@@ -1,6 +1,6 @@
 ﻿using Core.DataAccess.Entities;
-using Infrastructure.Data;
-using Infrastructure.Repositories;
+using Infrastructure.DataAccess.Data;
+using Infrastructure.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;

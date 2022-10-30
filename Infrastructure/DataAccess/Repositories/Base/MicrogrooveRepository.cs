@@ -1,7 +1,7 @@
-﻿using Infrastructure.Data;
+﻿using Infrastructure.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Repositories;
+namespace Infrastructure.DataAccess.Repositories.Base;
 
 public class MicrogrooveRepository<T> : AsyncRepository<T> where T : class
 {

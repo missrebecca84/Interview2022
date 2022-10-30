@@ -1,6 +1,7 @@
 ﻿using Core.DataAccess.Entities;
-using Infrastructure.Data;
-using Infrastructure.Repositories;
+using Infrastructure.DataAccess.Data;
+using Infrastructure.DataAccess.Repositories;
+using Infrastructure.DataAccess.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;

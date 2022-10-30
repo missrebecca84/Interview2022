@@ -6,12 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Data
+namespace Infrastructure.DataAccess.Data
 {
     public class MicrogrooveContext : DbContext
     {
         public MicrogrooveContext(DbContextOptions<MicrogrooveContext> options) : base(options) { }
         public DbSet<Customer> Customers { get; set; }
-        
+
     }
 }

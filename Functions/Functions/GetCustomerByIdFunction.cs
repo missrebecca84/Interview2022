@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Net;
+using Core.Domain.Services;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
@@ -9,10 +10,12 @@ namespace Application.Functions
     public class GetByIdFunction
     {
         private readonly ILogger _logger;
+        private readonly ICustomerService _customerService;
 
-        public GetByIdFunction(ILoggerFactory loggerFactory)
+        public GetByIdFunction(ILogger logger, ICustomerService customerService)
         {
-            _logger = loggerFactory.CreateLogger<GetByIdFunction>();
+            _logger = logger;
+            _customerService = customerService;
         }
 
         [Function("GetByIdFunction")]

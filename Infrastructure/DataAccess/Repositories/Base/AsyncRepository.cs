@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace Infrastructure.Repositories;
+namespace Infrastructure.DataAccess.Repositories.Base;
 public abstract class AsyncRepository<T> : IAsyncRepository<T> where T : class
 {
     protected DbContext Context;

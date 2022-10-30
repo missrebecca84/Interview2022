@@ -1,6 +1,10 @@
 ﻿using Core.DataAccess.Entities;
-using Infrastructure.Data;
-using Infrastructure.Repositories;
+using Core.Domain.Services;
+using Infrastructure.DataAccess.Data;
+using Infrastructure.DataAccess.Repositories;
+using Infrastructure.DataAccess.Repositories.Base;
+using Infrastructure.Domain.Mappers;
+using Infrastructure.Domain.Services;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -28,8 +32,10 @@ public class Program
                 var cnn = new SqliteConnection("Filename=:memory:");
                 cnn.Open();
                 a.AddDbContext<MicrogrooveContext>(o => o.UseSqlite(cnn));
-                a.AddSingleton(new LoggerFactory().CreateLogger("MicroGroove"));
+                a.AddSingleton(new LoggerFactory().CreateLogger("Microgroove"));
+                a.AddAutoMapper(typeof(CustomerMapper));
                 a.AddScoped(typeof(CustomerRepository), typeof(MicrogrooveRepository<Customer>));
+                a.AddScoped(typeof(ICustomerService), typeof(CustomerService));
             })
             .Build();
 

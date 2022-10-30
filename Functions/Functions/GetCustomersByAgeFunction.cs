@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Net;
+using Core.Domain.Services;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
@@ -9,10 +10,12 @@ namespace Application.Functions
     public class GetCustomersByAgeFunction
     {
         private readonly ILogger _logger;
+        private readonly ICustomerService _customerService;
 
-        public GetCustomersByAgeFunction(ILoggerFactory loggerFactory)
+        public GetCustomersByAgeFunction(ILogger logger, ICustomerService customerService)
         {
-            _logger = loggerFactory.CreateLogger<GetCustomersByAgeFunction>();
+            _logger = logger;
+            _customerService = customerService;
         }
 
         [Function("GetCustomersByAgeFunction")]

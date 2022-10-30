@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Net;
+using Core.Domain.Services;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
@@ -9,10 +10,12 @@ namespace Application.Functions
     public class SaveCustomerFunction
     {
         private readonly ILogger _logger;
+        private readonly ICustomerService _customerService;
 
-        public SaveCustomerFunction(ILoggerFactory loggerFactory)
+        public SaveCustomerFunction(ILogger logger, ICustomerService customerService)
         {
-            _logger = loggerFactory.CreateLogger<SaveCustomerFunction>();
+            _logger = logger;
+            _customerService = customerService;
         }
 
         [Function("SaveCustomerFunction")]
