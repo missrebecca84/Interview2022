@@ -35,7 +35,7 @@ public class MicrogrooveRepositoryTests
         var mockContext = new Mock<MicrogrooveContext>(_contextOptions);
         mockContext.Setup(s => s.Set<Customer>()).Returns(dbSetMock.Object);
 
-        var customerRepository = new CustomerRepository(mockContext.Object);
+        var customerRepository = new MicrogrooveRepository<Customer>(mockContext.Object);
         var customer = customerRepository.GetById(Guid.NewGuid()).Result;
 
         //Assert  
@@ -54,7 +54,7 @@ public class MicrogrooveRepositoryTests
             DateOfBirth = DateTime.Now.Date
         };
         var context = new MicrogrooveContext(_contextOptions);
-        var customerRepository = new CustomerRepository(context);
+        var customerRepository = new MicrogrooveRepository<Customer>(context);
 
         //Act
         try
@@ -79,7 +79,7 @@ public class MicrogrooveRepositoryTests
             DateOfBirth = DateTime.Now.Date
         };
         var context = new MicrogrooveContext(_contextOptions);
-        var customerRepository = new CustomerRepository(context);
+        var customerRepository = new MicrogrooveRepository<Customer>(context);
         
         //Act
         await customerRepository.Add(customer);

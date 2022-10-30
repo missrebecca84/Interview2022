@@ -28,6 +28,7 @@ public class Program
                 var cnn = new SqliteConnection("Filename=:memory:");
                 cnn.Open();
                 a.AddDbContext<MicrogrooveContext>(o => o.UseSqlite(cnn));
+                a.AddSingleton<ILogger>(new LoggerFactory().CreateLogger("MicroGroove"));
                 a.AddScoped(typeof(CustomerRepository), typeof(MicrogrooveRepository<Customer>));
             })
             .Build();

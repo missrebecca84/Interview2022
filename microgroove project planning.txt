@@ -1,0 +1,23 @@
+function project
+start up
+dependency injection
+logging
+in memory database
+
+core and infrastructure project
+customer domain object
+ICustomerService
+CustomerService
+CustomerService Unit Tests
+
+data access -- 
+entity framework db context
+IRepository
+IRepository<T>
+customer data access object
+ICustomerRepository
+CustomerRepository
+CustomerRepository Unit Tests
+
+functions
+function unit tests
