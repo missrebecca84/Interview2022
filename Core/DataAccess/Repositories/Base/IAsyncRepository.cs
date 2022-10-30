@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Microgroove.Core.Repositories;
+namespace Core.DataAccess.Repositories.Base;
 public interface IAsyncRepository<T> where T : class
 {
     /// <summary>

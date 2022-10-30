@@ -1,9 +1,9 @@
-﻿using Microgroove.Core.Entities;
-using Microgroove.Core.Repositories;
-using Microgroove.Infrastructure.Data;
+﻿using Core.DataAccess.Entities;
+using Core.DataAccess.Repositories;
+using Infrastructure.Data;
 using Microsoft.Extensions.Logging;
 
-namespace Microgroove.Infrastructure.Repositories;
+namespace Infrastructure.Repositories;
 
 public class CustomerRepository : MicrogrooveRepository<Customer>, ICustomerRepository
 {

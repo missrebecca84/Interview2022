@@ -4,7 +4,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 
-namespace Microgroove.Functions.Functions
+namespace Application.Functions
 {
     public class SaveCustomerFunction
     {
@@ -16,7 +16,7 @@ namespace Microgroove.Functions.Functions
         }
 
         [Function("SaveCustomerFunction")]
-        public HttpResponseData Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "api/customers")] 
+        public HttpResponseData Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "api/customers")]
         HttpRequestData req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");

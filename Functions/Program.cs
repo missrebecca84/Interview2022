@@ -1,6 +1,6 @@
-﻿using Microgroove.Core.Entities;
-using Microgroove.Infrastructure.Data;
-using Microgroove.Infrastructure.Repositories;
+﻿using Core.DataAccess.Entities;
+using Infrastructure.Data;
+using Infrastructure.Repositories;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,7 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.IO;
 
-namespace Microgroove.Functions;
+namespace Application;
 
 public class Program
 {
@@ -28,12 +28,12 @@ public class Program
                 var cnn = new SqliteConnection("Filename=:memory:");
                 cnn.Open();
                 a.AddDbContext<MicrogrooveContext>(o => o.UseSqlite(cnn));
-                a.AddSingleton<ILogger>(new LoggerFactory().CreateLogger("MicroGroove"));
+                a.AddSingleton(new LoggerFactory().CreateLogger("MicroGroove"));
                 a.AddScoped(typeof(CustomerRepository), typeof(MicrogrooveRepository<Customer>));
             })
             .Build();
-            
-        
-       host.Run();
+
+
+        host.Run();
     }
 }

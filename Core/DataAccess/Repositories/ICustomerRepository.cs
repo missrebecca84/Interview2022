@@ -1,6 +1,7 @@
-﻿using Microgroove.Core.Entities;
+﻿using Core.DataAccess.Entities;
+using Core.DataAccess.Repositories.Base;
 
-namespace Microgroove.Core.Repositories
+namespace Core.DataAccess.Repositories
 {
     public interface ICustomerRepository : IAsyncRepository<Customer>
     {

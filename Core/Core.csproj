@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AssemblyName>Microgroove.$(MSBuildProjectName.Replace(" ", "_"))</AssemblyName>
+    <AssemblyName>$(MSBuildProjectName.Replace(" ", "_"))</AssemblyName>
   </PropertyGroup>
 
 </Project>

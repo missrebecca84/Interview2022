@@ -1,6 +1,6 @@
-﻿using Microgroove.Core.Entities;
-using Microgroove.Infrastructure.Data;
-using Microgroove.Infrastructure.Repositories;
+﻿using Core.DataAccess.Entities;
+using Infrastructure.Data;
+using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;

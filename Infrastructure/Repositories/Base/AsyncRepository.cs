@@ -1,8 +1,8 @@
-﻿using Microgroove.Core.Repositories;
+﻿using Core.DataAccess.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace Microgroove.Infrastructure.Repositories;
+namespace Infrastructure.Repositories;
 public abstract class AsyncRepository<T> : IAsyncRepository<T> where T : class
 {
     protected DbContext Context;
