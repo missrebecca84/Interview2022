@@ -78,7 +78,7 @@
 			"response": []
 		},
 		{
-			"name": "Retrieve Customer by Saved Guid",
+			"name": "Retrieve Customer by Guid",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -96,14 +96,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{EndpointUrl}}/api/customers/6fa11b09-e697-4591-b1a7-77a176dadae1",
+					"raw": "{{EndpointUrl}}/api/customers/3942585b-8231-4f60-a302-1cec0287b90a",
 					"host": [
 						"{{EndpointUrl}}"
 					],
 					"path": [
 						"api",
 						"customers",
-						"6fa11b09-e697-4591-b1a7-77a176dadae1"
+						"3942585b-8231-4f60-a302-1cec0287b90a"
 					]
 				}
 			},
