@@ -5,8 +5,17 @@ namespace Infrastructure.DataAccess.Data
 {
     public class BusinessContext : DbContext
     {
-        public BusinessContext(DbContextOptions<BusinessContext> options) : base(options) { }
-        public DbSet<Customer> Customers { get; set; }
+        private static bool _created = false;
+        public BusinessContext(DbContextOptions<BusinessContext> options) : base(options)
+        {
+            if (!_created)
+            {
+                _created = true;
+                Database.EnsureDeleted();
+                Database.EnsureCreated();
+            }
+        }
+        public virtual DbSet<Customer> Customers { get; set; }
 
     }
 }

@@ -1,8 +1,13 @@
+using Core.Domain.Exceptions;
 using Core.Domain.Services;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System;
+using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Application.Functions
 {
@@ -18,15 +23,34 @@ namespace Application.Functions
         }
 
         [Function("GetCustomersByAgeFunction")]
-        public HttpResponseData Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "api/customers/{age}")] HttpRequestData req)
+        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "customers/{age:int}")] HttpRequestData req, int age)
         {
-            _logger.LogInformation("C# HTTP trigger function processed a request.");
-
+            _logger.LogInformation("Entering {Method}", nameof(GetCustomersByAgeFunction));
             var response = req.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
+            response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+            try
+            {
+                if (age == 0)
+                    throw new InvalidAgeException();
 
-            response.WriteString("Welcome to Azure Functions!");
-
+                var returnValue = await _customerService.GetCustomersByAgeAsync(age).ConfigureAwait(false);
+                if (returnValue.Any())
+                {
+                    var returnString = JsonConvert.SerializeObject(returnValue);
+                    response.WriteString(returnString);
+                }
+                else
+                {
+                    response.StatusCode = HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error during {Method}", nameof(GetCustomersByAgeFunction));
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.WriteString(ex.Message);
+            }
+            _logger.LogInformation("Exiting {Method}", nameof(GetCustomersByAgeFunction));
             return response;
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Core.DataAccess.Entities;
+using Core.DataAccess.Repositories;
 using Core.Domain.Services;
 using Infrastructure.DataAccess.Data;
 using Infrastructure.DataAccess.Repositories;
@@ -34,7 +35,7 @@ public class Program
                 a.AddDbContext<BusinessContext>(o => o.UseSqlite(cnn));
                 a.AddSingleton(new LoggerFactory().CreateLogger("Business"));
                 a.AddAutoMapper(typeof(CustomerMapper));
-                a.AddScoped(typeof(CustomerRepository), typeof(BusinessRepository<Customer>));
+                a.AddScoped(typeof(ICustomerRepository), typeof(CustomerRepository));
                 a.AddScoped(typeof(ICustomerService), typeof(CustomerService));
             })
             .Build();

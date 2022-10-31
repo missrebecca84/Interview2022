@@ -1,0 +1,119 @@
+{
+	"info": {
+		"_postman_id": "6f7cd199-ce7a-437c-af23-25f111d2b484",
+		"name": "Interview 2022",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Save Customer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"FullName\":\"Rebecca Clark\",\"DateOfBirth\":\"1984-3-8\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{EndpointUrl}}/api/customers",
+					"host": [
+						"{{EndpointUrl}}"
+					],
+					"path": [
+						"api",
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get 38 year old customer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{EndpointUrl}}/api/customers/38",
+					"host": [
+						"{{EndpointUrl}}"
+					],
+					"path": [
+						"api",
+						"customers",
+						"38"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve Customer by Saved Guid",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{EndpointUrl}}/api/customers/6fa11b09-e697-4591-b1a7-77a176dadae1",
+					"host": [
+						"{{EndpointUrl}}"
+					],
+					"path": [
+						"api",
+						"customers",
+						"6fa11b09-e697-4591-b1a7-77a176dadae1"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "SavedCustomerId",
+			"value": ""
+		}
+	]
+}

@@ -59,10 +59,12 @@ public class CustomerRepository : BusinessRepository<Customer>, ICustomerReposit
             if (age == 0)
                 throw new InvalidAgeException();
 
-            var ageInDaysStart = age * 365;
-            var ageInDaysEnd = (age + 1) * 365;
-            returnList = await GetWhere(a => DateTime.Now.Date.Subtract(a.DateOfBirth.Date).Days >= ageInDaysStart
-                                        && DateTime.Now.Date.Subtract(a.DateOfBirth.Date).Days < ageInDaysEnd);
+            var ageInDaysStart = (age + 1) * -365;
+            var ageInDaysEnd =  age * -365;
+            var startDate = DateTime.Now.Date.AddDays(ageInDaysStart);
+            var endDate = DateTime.Now.Date.AddDays(ageInDaysEnd);
+            returnList = await GetWhere(a => a.DateOfBirth >= startDate
+                                        && a.DateOfBirth < endDate);
         }
         catch (Exception ex)
         {
